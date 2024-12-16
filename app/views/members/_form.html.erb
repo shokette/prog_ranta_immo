@@ -1,0 +1,74 @@
+<%= form_with(model: @member, local: true) do |f| %>
+    <% if @member&.errors&.any? %>
+        <div class="alert alert-danger">
+            <h2 class="h6"><%= pluralize(@member.errors.count, "erreur") %> :</h2>
+            <ul class="mb-0">
+                <% @member.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <%= f.label :name, "Nom Complet", class: "form-label required" %>
+                <%= f.text_field :name,
+                                 class: "form-control #{'is-invalid' if @member&.errors[:name].any?}" %>
+                <% if @member.errors[:name].any? %>
+                    <div class="invalid-feedback">
+                        <%= @member&.errors[:name].join(', ') %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <%= f.label :role_id, "Rôle", class: "form-label required" %>
+                <div class="d-flex gap-2">
+                    <%= f.collection_select :role_id,
+                                            @roles,
+                                            :id,
+                                            ->(role) { "#{role.name}" },
+                                            { prompt: "Rechercher un rôle..." },
+                                            { class: "select2 #{'is-invalid' if @member.errors[:role_id].any?}" } %>
+                </div>
+                <% if @member.errors[:role_id].any? %>
+                    <div class="invalid-feedback">
+                        <%= @member.errors[:role_id].join(', ') %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="mb-3">
+                <%= f.label :phone, "Téléphone", class: "form-label required" %>
+                <%= f.text_field :phone,
+                                 class: "form-control #{'is-invalid' if @member.errors[:phone].any?}" %>
+                <% if @member.errors[:phone].any? %>
+                    <div class="invalid-feedback">
+                        <%= @member.errors[:phone].join(', ') %>
+                    </div>
+                <% end %>
+            </div>
+
+            <div class="mb-3">
+                <%= f.label :email, "Email", class: "form-label required" %>
+                <%= f.text_field :email,
+                                 class: "form-control #{'is-invalid' if @member.errors[:email].any?}" %>
+                <% if @member.errors[:email].any? %>
+                    <div class="invalid-feedback">
+                        <%= @member.errors[:email].join(', ') %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+        <%= link_to "Retour", hikes_path, class: "btn btn-outline-secondary ms-2" %>
+    </div>
+<% end %>

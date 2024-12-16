@@ -1,0 +1,58 @@
+services:
+  web:
+    build: .
+    command: >
+      sh -c '
+      chown -R ${UID:-1000}:${GID:-1000} /app/tmp &&
+      find /app/tmp -type d -exec chmod 777 {} + &&
+      find /app/tmp -type f -exec chmod 666 {} + &&
+      rm -f /app/tmp/pids/server.pid &&
+      bundle exec rails s -p 3000 -b "0.0.0.0"'
+    ports:
+      - "3080:3000"
+    environment:
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - DATABASE_URL=${DATABASE_URL:-mysql2://root:${DB_PASSWORD:-password}@db:3306/${DB_NAME:-progrando_${RAILS_ENV:-development}}}
+      - RAILS_SERVE_STATIC_FILES=${RAILS_SERVE_STATIC_FILES:-false}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE:-development_key}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+    volumes:
+      - .:/app
+      - tmp_data:/app/tmp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3080"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    user: root
+    tty: true
+    stdin_open: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  sidekiq:
+    build: .
+    command: bundle exec sidekiq
+    environment:
+      - RAILS_ENV=${RAILS_ENV:-development}
+      - DATABASE_URL=${DATABASE_URL:-mysql2://root:${DB_PASSWORD:-password}@db:3306/${DB_NAME:-progrando_${RAILS_ENV:-development}}}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379/0}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE:-development_key}
+    volumes:
+      - .:/app
+      - tmp_data:/app/tmp
+    restart: unless-stopped
+    user: root
+    healthcheck:
+      test: ["CMD-SHELL", "ps aux | grep '[s]idekiq'"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+
+volumes:
+  tmp_data:
+  redis_data:

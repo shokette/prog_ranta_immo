@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm mb-4">
+    <div class="container">
+        <%= link_to stats_dashboard_path, class: "text-decoration-none" do %>
+            <span class="navbar-brand fw-bold text-primary">
+                <i class="fas fa-mountain"></i> ProgRando
+            </span>
+        <% end %>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav ms-auto gap-2">
+                <%= link_to stats_dashboard_path,
+                            class: "btn #{current_page?(stats_dashboard_path) ? 'btn-primary' : 'btn-outline-primary'}" do %>
+                    <i class="fas fa-chart-line"></i> Dashboard
+                <% end %>
+
+                <%= link_to hikes_path,
+                            class: "btn #{current_page?(hikes_path) ? 'btn-primary' : 'btn-outline-primary'}" do %>
+                    <i class="fas fa-hiking"></i> Liste
+                <% end %>
+
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                        <i class="fas fa-plus"></i> Ajouter
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <%= link_to new_hike_history_path, class: "dropdown-item" do %>
+                            <i class="fas fa-history me-2"></i>Randonnée passée
+                        <% end %>
+                        <%= link_to new_hike_history_path, class: "dropdown-item" do %>
+                            <i class="fas fa-calendar-plus me-2"></i>Randonnée à venir
+                        <% end %>
+                        <%= link_to new_hike_path, class: "dropdown-item" do %>
+                            <i class="fas fa-map-marked-alt me-2"></i>Nouveau parcours
+                        <% end %>
+                        <div class="dropdown-divider"></div>
+                        <%= link_to members_path, class: "dropdown-item" do %>
+                            <i class="fas fa-users me-2"></i>Gérer les membres
+                        <% end %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

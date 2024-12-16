@@ -1,0 +1,54 @@
+<%= form_with(model: @guide, local: true) do |f| %>
+    <% if @guide&.errors&.any? %>
+        <div class="alert alert-danger">
+            <h2 class="h6"><%= pluralize(@guide.errors.count, "erreur") %> :</h2>
+            <ul class="mb-0">
+                <% @guide.errors.full_messages.each do |message| %>
+                    <li><%= message %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div class="row g-3">
+        <div class="col-md-6">
+            <div class="mb-3">
+                <%= f.label :name, "Nom Complet", class: "form-label required" %>
+                <%= f.text_field :name,
+                                 class: "form-control #{'is-invalid' if @guide&.errors[:name].any?}" %>
+                <% if @guide.errors[:name].any? %>
+                    <div class="invalid-feedback">
+                        <%= @guide&.errors[:name].join(', ') %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <%= f.label :phone, "Téléphone", class: "form-label required" %>
+                <%= f.text_field :phone,
+                                 class: "form-control #{'is-invalid' if @guide.errors[:phone].any?}" %>
+                <% if @guide.errors[:phone].any? %>
+                    <div class="invalid-feedback">
+                        <%= @guide.errors[:phone].join(', ') %>
+                    </div>
+                <% end %>
+            </div>
+
+            <div class="mb-3">
+                <%= f.label :email, "Email", class: "form-label required" %>
+                <%= f.text_field :email,
+                                 class: "form-control #{'is-invalid' if @guide.errors[:email].any?}" %>
+                <% if @guide.errors[:email].any? %>
+                    <div class="invalid-feedback">
+                        <%= @guide.errors[:email].join(', ') %>
+                    </div>
+                <% end %>
+            </div>
+        </div>
+    </div>
+    <div class="mt-4">
+        <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+        <%= link_to "Retour", hikes_path, class: "btn btn-outline-secondary ms-2" %>
+    </div>
+<% end %>
